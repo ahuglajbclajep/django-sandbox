@@ -10,8 +10,7 @@ fi
 
 # Check for existence of yapf.
 if [ -z $(pipenv run which yapf) ]; then
-  echo 'yapf not on path; can not format. Please install yapf:'
-  echo '    pipenv install -d'
+  echo 'yapf not on path. Please install yapf: pipenv install -d'
   exit 2
 fi
 
