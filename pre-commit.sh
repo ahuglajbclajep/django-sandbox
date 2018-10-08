@@ -8,14 +8,15 @@ if [ ! "$PYTHON_FILES" ]; then
   exit 0
 fi
 
-# Check for existence of yapf.
-if [ -z $(pipenv run which yapf) ]; then
-  echo 'yapf not on path. Please install yapf: pipenv install -d'
+# Check for existence of isort and yapf.
+if [ -z '$(pipenv run which isort yapf)' ]; then
+  echo 'commands not on path. Please install: pipenv install -d'
   exit 2
 fi
 
 # Format Python files, and add these.
 echo 'Formatting staged Python files . . .'
-pipenv run yapf -i -r ${PYTHON_FILES[@]}
+pipenv run isort -q ${PYTHON_FILES[@]}
+pipenv run yapf -i ${PYTHON_FILES[@]}
 git add ${PYTHON_FILES[@]}
 exit 0
