@@ -7,22 +7,17 @@ from .models import Choice, Question
 
 
 class IndexView(generic.ListView):
+    queryset = Question.objects.order_by('-pub_date')[:5]
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
-    def get_queryset(self):
-        """Return the last five published questions."""
-        return Question.objects.order_by('-pub_date')[:5]
 
-
+# You can directly use generic views with 'urlpatterns' as below,
+# but you should not use 'queryset' etc because it will only be evaluated once.
+# path('<int:pk>/', generic.DetailView.as_view(model=Question, template_name='polls/detail.html'), name='detail')
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
-
-
-class ResultsView(generic.DetailView):
-    model = Question
-    template_name = 'polls/results.html'
 
 
 def vote(request, question_id):
@@ -41,3 +36,8 @@ def vote(request, question_id):
         # Post/Redirect/Get pattern.
         return HttpResponseRedirect(
             reverse('polls:results', args=[question.id]))
+
+
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
