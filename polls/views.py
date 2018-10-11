@@ -1,21 +1,21 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils import timezone
 from django.views import generic
 
 from .models import Choice, Question
 
 
 class IndexView(generic.ListView):
-    queryset = Question.objects.order_by('-pub_date')[:5]
+    queryset = Question.objects.filter(
+        pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
 
-# You can directly use generic views with 'urlpatterns' as below,
-# but you should not use 'queryset' etc because it will only be evaluated once.
-# path('<int:pk>/', generic.DetailView.as_view(model=Question, template_name='polls/detail.html'), name='detail')
 class DetailView(generic.DetailView):
+    queryset = Question.objects.filter(pub_date__lte=timezone.now())
     model = Question
     template_name = 'polls/detail.html'
 
@@ -38,6 +38,9 @@ def vote(request, question_id):
             reverse('polls:results', args=[question.id]))
 
 
+# You can directly use generic views with 'urlpatterns' as below,
+# but you should not use 'queryset' etc because it will only be evaluated once:
+# generic.DetailView.as_view(model=Question, template_name='polls/results.html')
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
