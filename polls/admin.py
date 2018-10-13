@@ -23,4 +23,9 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
 
 
-admin.site.register(Question, QuestionAdmin)
+class MyAdminSite(admin.AdminSite):
+    site_header = 'Polls Administration'
+
+
+admin_site = MyAdminSite()
+admin_site.register(Question, QuestionAdmin)
