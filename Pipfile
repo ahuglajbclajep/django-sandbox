@@ -9,6 +9,7 @@ python_version = "3.7"
 [dev-packages]
 yapf = "*"
 isort = "*"
+"flake8" = "*"
 
 [packages]
 django = "*"
